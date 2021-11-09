@@ -48,8 +48,7 @@ input {
 			<div id=form>
 				<p>Submitted parameters:</p>
 				<table>
-					<c:forEach var="pname"
-						items="${pageContext.request.parameterNames}">
+					<c:forEach var="pname" items="${pageContext.request.parameterNames}">
 						<c:forEach items="${paramValues[pname]}" var="selectedValue">
 							<tr>
 								<td><c:out value="${pname}" /></td>
@@ -58,7 +57,10 @@ input {
 						</c:forEach>
 					</c:forEach>
 				</table>
-				<fieldset>
+			<h2>
+				<i style="color: #7bbac6;" class="fas fa-search"></i> Faceted Search
+			</h2>
+[]				<fieldset>
 					<input class='search-box' name="query" value="${param.query}"
 						size=50> <input type=submit name=submitButton value=Go!>
 					<c:if test="${not empty param.query}">
@@ -107,7 +109,12 @@ input {
 					<es:aggregator displayName="datatype"
 						fieldName="raw._source.dataItem.dataTypes.keyword" size="12" />
 
-					<c:set var="drillDownList"></c:set>
+					<c:set var="drillDownList">
+						<c:forEach var="pname" items="${pageContext.request.parameterNames}">
+							${pname}
+						</c:forEach>
+					
+					</c:set>
 					<es:search queryString="${param.query}" limitCriteria="1000">
 						<div style="float: left">
 							<div id="facet-box"
@@ -151,17 +158,16 @@ input {
 														<c:set var="position_med">
 															<c:choose>
 																<c:when test="${fn:contains(drillDownList, facet1)}">
-															'collapse show' 
-														</c:when>
+																	collapse show
+																</c:when>
 																<c:otherwise>
-															'collapse'
-														</c:otherwise>
+																	collapse
+																</c:otherwise>
 															</c:choose>
 														</c:set>
 
-														<div class="${position_med}"
-															id='${"facet-med-content-box"}${fn:replace(facet1," ", "")}'>
-															<ol class="facetList" id="top">
+														<div class="${position_med}" id='${"facet-med-content-box"}${fn:replace(facet1," ", "")}'>
+															<ol class="facetList">
 																<es:aggregationTermIterator>
 																	<li><input type="checkbox" id="index"
 																		name="<es:aggregationName />"
