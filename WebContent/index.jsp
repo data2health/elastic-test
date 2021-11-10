@@ -108,6 +108,8 @@ input {
 					<es:aggregator displayName="type" fieldName="study_type.keyword" />
 					<es:aggregator displayName="datatype"
 						fieldName="raw._source.dataItem.dataTypes.keyword" size="12" />
+					
+					<es:boost boost="2" fieldName="label"/>
 
 					<c:set var="drillDownList">
 						<c:forEach var="pname" items="${pageContext.request.parameterNames}">
