@@ -46,21 +46,24 @@ input {
 		<br /> <br />
 		<form method='GET' action='index.jsp'>
 			<div id=form>
-				<p>Submitted parameters:</p>
-				<table>
-					<c:forEach var="pname" items="${pageContext.request.parameterNames}">
-						<c:forEach items="${paramValues[pname]}" var="selectedValue">
-							<tr>
-								<td><c:out value="${pname}" /></td>
-								<td>${selectedValue}</td>
-							</tr>
+				<c:if test="${false}">
+					<p>Submitted parameters:</p>
+					<table>
+						<c:forEach var="pname" items="${pageContext.request.parameterNames}">
+							<c:forEach items="${paramValues[pname]}" var="selectedValue">
+								<tr>
+									<td><c:out value="${pname}" /></td>
+									<td>${selectedValue}</td>
+								</tr>
+							</c:forEach>
 						</c:forEach>
-					</c:forEach>
-				</table>
-			<h2>
-				<i style="color: #7bbac6;" class="fas fa-search"></i> Faceted Search
-			</h2>
-[]				<fieldset>
+					</table>
+				</c:if>
+				<h2>
+					<i style="color: #7bbac6;" class="fas fa-search"></i> Faceted
+					Search
+				</h2>
+				<fieldset>
 					<input class='search-box' name="query" value="${param.query}"
 						size=50> <input type=submit name=submitButton value=Go!>
 					<c:if test="${not empty param.query}">
@@ -76,26 +79,22 @@ input {
 						items="${pageContext.request.parameterNames}">
 						<c:forEach items="${paramValues[pname]}" var="selectedValue">
 							<c:choose>
-								<c:when test="${pname == 'query' || pname == 'submitButton' }">
+								<c:when	test="${pname == 'query' || pname == 'submitButton' || pname == 'result_table_length' }">
 								</c:when>
 								<c:when test="${pname == 'index'}">
 									<es:filter termString="${selectedValue}" fieldName="_${pname }" />
 								</c:when>
 								<c:when test="${pname == 'type'}">
-									<es:filter termString="${selectedValue}"
-										fieldName="study_type.keyword" />
+									<es:filter termString="${selectedValue}" fieldName="study_type.keyword" />
 								</c:when>
 								<c:when test="${pname == 'status'}">
-									<es:filter termString="${selectedValue}"
-										fieldName="overall_status.keyword" />
+									<es:filter termString="${selectedValue}" fieldName="overall_status.keyword" />
 								</c:when>
 								<c:when test="${pname == 'datatype'}">
-									<es:filter termString="${selectedValue}"
-										fieldName="raw._source.dataItem.dataTypes.keyword" />
+									<es:filter termString="${selectedValue}" fieldName="raw._source.dataItem.dataTypes.keyword" />
 								</c:when>
 								<c:otherwise>
-									<es:filter termString="${selectedValue}"
-										fieldName="${pname}.keyword" />
+									<es:filter termString="${selectedValue}" fieldName="${pname}.keyword" />
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
@@ -103,19 +102,19 @@ input {
 
 					<es:aggregator displayName="index" fieldName="_index" />
 					<es:aggregator displayName="entity" fieldName="entity.keyword" />
-					<es:aggregator displayName="status"
-						fieldName="overall_status.keyword" />
+					<es:aggregator displayName="status"	fieldName="overall_status.keyword" />
 					<es:aggregator displayName="type" fieldName="study_type.keyword" />
-					<es:aggregator displayName="datatype"
-						fieldName="raw._source.dataItem.dataTypes.keyword" size="12" />
-					
-					<es:boost boost="2" fieldName="label"/>
+					<es:aggregator displayName="datatype" fieldName="raw._source.dataItem.dataTypes.keyword" size="12" />
+
+					<es:boost boost="2" fieldName="label" />
+					<es:boost boost="2" fieldName="raw.name" />
 
 					<c:set var="drillDownList">
-						<c:forEach var="pname" items="${pageContext.request.parameterNames}">
+						<c:forEach var="pname"
+							items="${pageContext.request.parameterNames}">
 							${pname}
 						</c:forEach>
-					
+
 					</c:set>
 					<es:search queryString="${param.query}" limitCriteria="1000">
 						<div style="float: left">
@@ -168,7 +167,8 @@ input {
 															</c:choose>
 														</c:set>
 
-														<div class="${position_med}" id='${"facet-med-content-box"}${fn:replace(facet1," ", "")}'>
+														<div class="${position_med}"
+															id='${"facet-med-content-box"}${fn:replace(facet1," ", "")}'>
 															<ol class="facetList">
 																<es:aggregationTermIterator>
 																	<li><input type="checkbox" id="index"
@@ -177,7 +177,6 @@ input {
 																		class="form-check-input"
 																		<es:aggregationTermStatus request="${pageContext.request}"/>>
 																		<es:aggregationTerm /> (<es:aggregationTermCount />)
-																	
 																</es:aggregationTermIterator>
 															</ol>
 														</div>
@@ -197,60 +196,84 @@ input {
 									<es:count />
 								</p>
 							</div>
-							<div id="results-table" onscroll="scrollFunction()">
-								<table style="width: 100%">
-									<tr>
-										<th>Result</th>
-										<th>Source</th>
-										<th>Score</th>
-									</tr>
-									<es:searchIterator>
+							<div>
+								<table id="result_table" class="display" style="width: 100%">
+									<thead>
 										<tr>
-											<td><h5>
-													<a href="<es:hit label="url" />"><es:hit label="label" /></a>
-												</h5> <c:set var="index">
-													<es:hit label="_index" />
-												</c:set> <c:choose>
-													<c:when test="${index == 'cd2h-youtube-video'}">
-														<es:hit label="description" />
-													</c:when>
-													<c:when test="${index == 'cd2h-youtube-playlist'}">
-														<es:hit label="description" />
-													</c:when>
-													<c:when test="${index == 'cd2h-youtube-channel'}">
-														<es:hit label="description" />
-													</c:when>
-													<c:when test="${index == 'cd2h-github-repository'}">
-														<es:hit label="raw/language" />
-													</c:when>
-													<c:when test="${index == 'cd2h-github-user'}">
-														<es:hit label="raw/name" />, <es:hit label="raw/bio" />
-													</c:when>
-													<c:when test="${index == 'cd2h-datamed'}">
-														<es:hit label="raw/_source/datasetDistributions/storedIn" />
-													</c:when>
-													<c:when test="${index == 'cd2h-datacite'}">
-														<es:hit label="raw/attributes/container-title" />
-													</c:when>
-													<c:when test="${index == 'cd2h-nih-reporter'}">
-														<es:hit label="core_project_num" /> : <es:hit
-															label="budget_start" /> to <es:hit label="budget_end" />
-													</c:when>
-													<c:when test="${index == 'cd2h-profile-vivo'}">
-														<es:hit label="title" />, <es:hit
-															label="site/description" />
-													</c:when>
-												</c:choose></td>
-											<td><es:hit label="_index" /></td>
-											<td><es:hit label="score" /></td>
-										<tr>
-									</es:searchIterator>
+											<th>Result</th>
+											<th>Source</th>
+											<th>Score</th>
+										</tr>
+									</thead>
+									<tbody>
+										<es:searchIterator>
+											<tr>
+												<td><h5>
+														<a href="<es:hit label="url" />"><es:hit label="label" /></a>
+													</h5> <c:set var="index">
+														<es:hit label="_index" />
+													</c:set> <c:choose>
+														<c:when test="${index == 'cd2h-youtube-video'}">
+															<table>
+																<tr>
+																	<td><es:hit label="description" /></td>
+																	<td style="vertical-align: top"><img src='<es:hit label="video_thumbnail/url" />'></td>
+																</tr>
+															</table>
+														</c:when>
+														<c:when test="${index == 'cd2h-youtube-playlist'}">
+															<es:hit label="description" />
+														</c:when>
+														<c:when test="${index == 'cd2h-youtube-channel'}">
+															<es:hit label="description" />
+														</c:when>
+														<c:when test="${index == 'cd2h-github-repository'}">
+															<es:hit label="raw/language" />
+														</c:when>
+														<c:when test="${index == 'cd2h-github-user'}">
+															<table>
+																<tr>
+																	<td><es:hit label="raw/name" />, <es:hit label="raw/bio" /></td>
+																	<td style="vertical-align: top"><img src='<es:hit label="raw/avatar_url" />' width="100px"></td>
+																</tr>
+															</table>
+														</c:when>
+														<c:when test="${index == 'cd2h-github-organization'}">
+															<table>
+																<tr>
+																	<td><es:hit label="raw/name" /></td>
+																	<td style="vertical-align: top"><img src='<es:hit label="raw/avatar_url" />' width="100px"></td>
+																</tr>
+															</table>
+														</c:when>
+														<c:when test="${index == 'cd2h-datamed'}">
+															<es:hit label="raw/_source/datasetDistributions/storedIn" />
+														</c:when>
+														<c:when test="${index == 'cd2h-datacite'}">
+															<es:hit label="raw/attributes/container-title" />
+														</c:when>
+														<c:when test="${index == 'cd2h-nih-reporter'}">
+															<es:hit label="core_project_num" /> : <es:hit label="budget_start" /> to <es:hit label="budget_end" />
+														</c:when>
+														<c:when test="${index == 'cd2h-profile-vivo'}">
+															<es:hit label="title" />, <es:hit label="site/description" />
+														</c:when>
+													</c:choose></td>
+												<td><es:hit label="_index" /></td>
+												<td><es:hit label="score" /></td>
+											</tr>
+										</es:searchIterator>
+									</tbody>
 								</table>
-							</div>
-							<div id="results-scroll" style="text-align: right;">
-								<button id="backtop" title="Back to Top">
-									<i class="fas fa-chevron-up"></i>
-								</button>
+								<script>
+									$(document).ready(function() {
+										$('#result_table').DataTable( {
+											pageLength: 5,
+									    	lengthMenu: [ 5, 10, 25, 50, 75, 100 ],
+									    	order: [[2, 'desc']]
+										} );
+									});
+								</script>
 							</div>
 						</div>
 					</es:search>
