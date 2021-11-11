@@ -203,6 +203,7 @@ input {
 											<th>Result</th>
 											<th>Source</th>
 											<th>Score</th>
+											<th>Raw</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -226,7 +227,7 @@ input {
 															<es:hit label="description" />
 														</c:when>
 														<c:when test="${index == 'cd2h-github-repository'}">
-															<es:hit label="raw/language" />
+															<es:hit label="raw/language" /><es:hit label="raw/topics" />
 														</c:when>
 														<c:when test="${index == 'cd2h-github-user'}">
 															<table>
@@ -259,6 +260,14 @@ input {
 													</c:choose></td>
 												<td><es:hit label="_index" /></td>
 												<td><es:hit label="score" /></td>
+												<td>
+													<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
+													<div id="accordion_<es:hit label="_id"/>">
+														<div id="details_<es:hit label="_id"/>" class="panel-collapse collapse">
+															<pre><code><es:document/></code></pre>
+														</div>
+													</div>
+												</td>
 											</tr>
 										</es:searchIterator>
 									</tbody>
