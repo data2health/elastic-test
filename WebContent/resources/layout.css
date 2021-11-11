@@ -11,19 +11,19 @@ body, img, h1, h2, h3, h4, h5, h6, ul, li, p, a, form {
 }
 body {
     background-color:white;
-	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 	line-height: 2em;
 	color: #414b56;
 	font-size: 12pt;
 }
 h2 {
-	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 	margin: 20px 0;
 	font-size: 1.75em;
 	font-weight:450; 
 }
 h3 {
-	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"
+	font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 	margin: 20px 0;
 	font-size: 1.25em;
 }
@@ -165,7 +165,6 @@ ul > li {
     padding-right: 0.75em;
 	border: 2px groove (internal value);
 	border-width: thin;
-	}
 }
 
     
@@ -175,7 +174,7 @@ ul > li {
 
 #footer {
     text-align:center;
-    width=100%;
+    width:100%;
     padding:20px 0px 0px 0px;
  	bottom:0; 
 }

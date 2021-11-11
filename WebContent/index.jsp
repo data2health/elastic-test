@@ -208,11 +208,9 @@ input {
 									<tbody>
 										<es:searchIterator>
 											<tr>
-												<td><h5>
-														<a href="<es:hit label="url" />"><es:hit label="label" /></a>
-													</h5> <c:set var="index">
-														<es:hit label="_index" />
-													</c:set> <c:choose>
+												<td><h5><a href="<es:hit label="url" />"><es:hit label="label" /></a></h5>
+													<c:set var="index"><es:hit label="_index" /></c:set>
+													<c:choose>
 														<c:when test="${index == 'cd2h-youtube-video'}">
 															<table>
 																<tr>
