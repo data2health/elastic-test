@@ -264,7 +264,7 @@ input {
 													<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
 													<div id="accordion_<es:hit label="_id"/>">
 														<div id="details_<es:hit label="_id"/>" class="panel-collapse collapse">
-															<pre><code><es:document/></code></pre>
+															<pre><code><es:document escape="true" /></code></pre>
 														</div>
 													</div>
 												</td>
