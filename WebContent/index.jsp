@@ -247,6 +247,10 @@ input {
 														</c:when>
 														<c:when test="${index == 'cd2h-datamed'}">
 															<es:hit label="raw/_source/datasetDistributions/storedIn" />
+															<br><strong>Data Types:</strong>
+															<es:arrayIterator label="raw/_source/dataItem/dataTypes" var="type">
+																<es:hit label=""/><c:if test="${!type.isLast}">,</c:if>
+															</es:arrayIterator>
 														</c:when>
 														<c:when test="${index == 'cd2h-datacite'}">
 															<es:hit label="raw/attributes/container-title" />
@@ -254,10 +258,33 @@ input {
 														<c:when test="${index == 'cd2h-nih-reporter'}">
 															<es:hit label="core_project_num" /> : <es:hit label="budget_start" /> to <es:hit label="budget_end" />
 														</c:when>
+														<c:when test="${index == 'cd2h-nih-litcovid'}">
+															<es:hit label="medline_journal_info/medline_ta" />
+															<br><strong>Authors:</strong>
+															<es:arrayIterator label="author" var="auth">
+																<c:set var="coll"><es:hit label="collective_name"/></c:set>
+																<c:choose>
+																	<c:when test="${empty coll}">
+																		<es:hit label="initials"/> <es:hit label="last_name"/>
+																		(<es:arrayIterator label="author_affiliation" var="aff">
+																			<es:hit label="affiliation"/><c:if test="${!aff.isLast}">,</c:if>
+																		</es:arrayIterator>)<c:if test="${!auth.isLast}">,</c:if>
+																	</c:when>
+																	<c:otherwise>
+																		<es:hit label="collective_name"/><c:if test="${!auth.isLast}">,</c:if>
+																	</c:otherwise>
+																</c:choose>
+															</es:arrayIterator>
+															<br><strong>Keywords:</strong>
+															<es:arrayIterator label="keyword" var="key">
+																<es:hit label="keyword"/><c:if test="${!key.isLast}">,</c:if>
+															</es:arrayIterator>
+														</c:when>
 														<c:when test="${index == 'cd2h-profile-vivo'}">
 															<es:hit label="title" />, <es:hit label="site/description" />
 														</c:when>
-													</c:choose></td>
+													</c:choose>
+												</td>
 												<td><es:hit label="_index" /></td>
 												<td><es:hit label="score" /></td>
 												<td>
