@@ -261,19 +261,20 @@ input {
 														<c:when test="${index == 'cd2h-nih-litcovid'}">
 															<es:hit label="medline_journal_info/medline_ta" />
 															<br><strong>Authors:</strong>
-															<es:arrayIterator label="author" var="auth">
+															<es:arrayIterator label="author" var="auth" limitCriteria="5" >
 																<c:set var="coll"><es:hit label="collective_name"/></c:set>
 																<c:choose>
 																	<c:when test="${empty coll}">
 																		<es:hit label="initials"/> <es:hit label="last_name"/>
-																		(<es:arrayIterator label="author_affiliation" var="aff">
+																		(<i><es:arrayIterator label="author_affiliation" var="aff">
 																			<es:hit label="affiliation"/><c:if test="${!aff.isLast}">,</c:if>
-																		</es:arrayIterator>)<c:if test="${!auth.isLast}">,</c:if>
+																		</es:arrayIterator></i>)<c:if test="${!auth.isLast}">,</c:if>
 																	</c:when>
 																	<c:otherwise>
 																		<es:hit label="collective_name"/><c:if test="${!auth.isLast}">,</c:if>
 																	</c:otherwise>
 																</c:choose>
+																<c:if test="${auth.hitRank == 5 && auth.count > 5}">, et al.</c:if>
 															</es:arrayIterator>
 															<br><strong>Keywords:</strong>
 															<es:arrayIterator label="keyword" var="key">
