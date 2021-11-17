@@ -106,8 +106,8 @@ input {
 					<es:aggregator displayName="type" fieldName="study_type.keyword" />
 					<es:aggregator displayName="datatype" fieldName="raw._source.dataItem.dataTypes.keyword" size="12" />
 
-					<es:boost boost="2" fieldName="label" />
-					<es:boost boost="2" fieldName="raw.name" />
+					<es:searchField boost="4" fieldName="label" />
+					<es:searchField boost="4" fieldName="raw.name" />
 
 					<c:set var="drillDownList">
 						<c:forEach var="pname"
@@ -116,7 +116,7 @@ input {
 						</c:forEach>
 
 					</c:set>
-					<es:search queryString="${param.query}" limitCriteria="1000">
+					<es:search queryString="${param.query}" limitCriteria="1000" >
 						<div style="float: left">
 							<div id="facet-box"
 								style="width: 100%; padding: 0px 80px 0px 0px; float: left">
