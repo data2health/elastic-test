@@ -108,6 +108,7 @@ input {
 
 					<es:searchField boost="4" fieldName="label" />
 					<es:searchField boost="4" fieldName="raw.name" />
+					<es:searchField boost="4" fieldName="name" />
 					
 					<es:resultIncludeField fieldName="url"/>
 					<es:resultIncludeField fieldName="label"/>
@@ -129,6 +130,9 @@ input {
 					<es:resultIncludeField fieldName="keyword"/>
 					<es:resultIncludeField fieldName="title"/>
 					<es:resultIncludeField fieldName="site.description"/>
+
+					<es:resultIncludeField fieldName="doi"/>
+					<es:resultIncludeField fieldName="name"/>
 
 					<c:set var="drillDownList">
 						<c:forEach var="pname"
@@ -230,97 +234,128 @@ input {
 									</thead>
 									<tbody>
 										<es:searchIterator>
+											<c:set var="index"><es:hit label="_index" /></c:set>
 											<tr>
-												<td><h5><a href="<es:hit label="url" />"><es:hit label="label" /></a></h5>
-													<c:set var="index"><es:hit label="_index" /></c:set>
-													<c:choose>
-														<c:when test="${index == 'cd2h-youtube-video'}">
-															<table>
-																<tr>
-																	<td><es:hit label="description" /></td>
-																	<td style="vertical-align: top"><img src='<es:hit label="video_thumbnail.url" />'></td>
-																</tr>
-															</table>
+												<td><c:choose>
+														<c:when test="${fn:startsWith(index,'cd2h-')}">
+															<h5><a href="<es:hit label="url" />"><es:hit label="label" /></a> </h5>
+															<c:choose>
+																<c:when test="${index == 'cd2h-youtube-video'}">
+																	<table>
+																		<tr>
+																			<td><es:hit label="description" /></td>
+																			<td style="vertical-align: top"><img src='<es:hit label="video_thumbnail.url" />'></td>
+																		</tr>
+																	</table>
+																</c:when>
+																<c:when test="${index == 'cd2h-youtube-playlist'}">
+																	<es:hit label="description" />
+																</c:when>
+																<c:when test="${index == 'cd2h-youtube-channel'}">
+																	<es:hit label="description" />
+																</c:when>
+																<c:when test="${index == 'cd2h-github-repository'}">
+																	<es:hit label="raw.language" />
+																	<es:hit label="raw.topics" />
+																</c:when>
+																<c:when test="${index == 'cd2h-github-user'}">
+																	<table>
+																		<tr>
+																			<td><es:hit label="raw.name" />, <es:hit label="raw.bio" /></td>
+																			<td style="vertical-align: top"><img src='<es:hit label="raw.avatar_url" />' width="100px"></td>
+																		</tr>
+																	</table>
+																</c:when>
+																<c:when test="${index == 'cd2h-github-organization'}">
+																	<table>
+																		<tr>
+																			<td><es:hit label="raw.name" /></td>
+																			<td style="vertical-align: top"><img src='<es:hit label="raw.avatar_url" />' width="100px"></td>
+																		</tr>
+																	</table>
+																</c:when>
+																<c:when test="${index == 'cd2h-datamed'}">
+																	<es:hit label="raw._source.datasetDistributions.storedIn" />
+																	<br>
+																	<strong>Data Types:</strong>
+																	<es:arrayIterator label="raw._source.dataItem.dataTypes" var="type">
+																		<es:hit label="" /><c:if test="${!type.isLast}">,</c:if>
+																	</es:arrayIterator>
+																</c:when>
+																<c:when test="${index == 'cd2h-datacite'}">
+																	<es:hit label="raw.attributes.container-title" />
+																</c:when>
+																<c:when test="${index == 'cd2h-nih-reporter'}">
+																	<es:hit label="core_project_num" /> : <es:hit label="budget_start" /> to <es:hit label="budget_end" />
+																</c:when>
+																<c:when test="${index == 'cd2h-nih-litcovid'}">
+																	<es:hit label="medline_journal_info.medline_ta" />
+																	<br>
+																	<strong>Authors:</strong>
+																	<es:arrayIterator label="author" var="auth"
+																		limitCriteria="5">
+																		<c:set var="coll">
+																			<es:hit label="collective_name" />
+																		</c:set>
+																		<c:choose>
+																			<c:when test="${empty coll}">
+																				<es:hit label="initials" />
+																				<es:hit label="last_name" />
+																				(<i><es:arrayIterator label="author_affiliation" var="aff">
+																					<es:hit label="affiliation" /><c:if test="${!aff.isLast}">,</c:if>
+																				</es:arrayIterator></i>)<c:if test="${!auth.isLast}">,</c:if>
+																			</c:when>
+																			<c:otherwise>
+																				<es:hit label="collective_name" />
+																				<c:if test="${!auth.isLast}">,</c:if>
+																			</c:otherwise>
+																		</c:choose>
+																		<c:if test="${auth.hitRank == 5 && auth.count > 5}">, et al.</c:if>
+																	</es:arrayIterator>
+																	<br>
+																	<strong>Keywords:</strong>
+																	<es:arrayIterator label="keyword" var="key">
+																		<es:hit label="keyword" /><c:if test="${!key.isLast}">,</c:if>
+																	</es:arrayIterator>
+																</c:when>
+																<c:when test="${index == 'cd2h-profile-vivo'}">
+																	<es:hit label="title" />, <es:hit label="site.description" />
+																</c:when>
+															</c:choose>
 														</c:when>
-														<c:when test="${index == 'cd2h-youtube-playlist'}">
-															<es:hit label="description" />
-														</c:when>
-														<c:when test="${index == 'cd2h-youtube-channel'}">
-															<es:hit label="description" />
-														</c:when>
-														<c:when test="${index == 'cd2h-github-repository'}">
-															<es:hit label="raw.language" /><es:hit label="raw.topics" />
-														</c:when>
-														<c:when test="${index == 'cd2h-github-user'}">
-															<table>
-																<tr>
-																	<td><es:hit label="raw.name" />, <es:hit label="raw.bio" /></td>
-																	<td style="vertical-align: top"><img src='<es:hit label="raw.avatar_url" />' width="100px"></td>
-																</tr>
-															</table>
-														</c:when>
-														<c:when test="${index == 'cd2h-github-organization'}">
-															<table>
-																<tr>
-																	<td><es:hit label="raw.name" /></td>
-																	<td style="vertical-align: top"><img src='<es:hit label="raw.avatar_url" />' width="100px"></td>
-																</tr>
-															</table>
-														</c:when>
-														<c:when test="${index == 'cd2h-datamed'}">
-															<es:hit label="raw._source.datasetDistributions.storedIn" />
-															<br><strong>Data Types:</strong>
-															<es:arrayIterator label="raw._source.dataItem.dataTypes" var="type">
-																<es:hit label=""/><c:if test="${!type.isLast}">,</c:if>
-															</es:arrayIterator>
-														</c:when>
-														<c:when test="${index == 'cd2h-datacite'}">
-															<es:hit label="raw.attributes.container-title" />
-														</c:when>
-														<c:when test="${index == 'cd2h-nih-reporter'}">
-															<es:hit label="core_project_num" /> : <es:hit label="budget_start" /> to <es:hit label="budget_end" />
-														</c:when>
-														<c:when test="${index == 'cd2h-nih-litcovid'}">
-															<es:hit label="medline_journal_info.medline_ta" />
-															<br><strong>Authors:</strong>
-															<es:arrayIterator label="author" var="auth" limitCriteria="5" >
-																<c:set var="coll"><es:hit label="collective_name"/></c:set>
+														<c:when test="${fn:startsWith(index,'outbreak')}">
+															<h5>
+																<c:set var="doi"><es:hit label="doi" /></c:set>
 																<c:choose>
-																	<c:when test="${empty coll}">
-																		<es:hit label="initials"/> <es:hit label="last_name"/>
-																		(<i><es:arrayIterator label="author_affiliation" var="aff">
-																			<es:hit label="affiliation"/><c:if test="${!aff.isLast}">,</c:if>
-																		</es:arrayIterator></i>)<c:if test="${!auth.isLast}">,</c:if>
+																	<c:when test="${not empty doi}">
+																		<a href="http://dx.doi.org/<es:hit label="doi" />"><es:hit label="name" /></a>
 																	</c:when>
 																	<c:otherwise>
-																		<es:hit label="collective_name"/><c:if test="${!auth.isLast}">,</c:if>
+																		<a href="<es:hit label="url" />"><es:hit label="name" /></a>
 																	</c:otherwise>
 																</c:choose>
-																<c:if test="${auth.hitRank == 5 && auth.count > 5}">, et al.</c:if>
-															</es:arrayIterator>
-															<br><strong>Keywords:</strong>
-															<es:arrayIterator label="keyword" var="key">
-																<es:hit label="keyword"/><c:if test="${!key.isLast}">,</c:if>
-															</es:arrayIterator>
+															</h5>
 														</c:when>
-														<c:when test="${index == 'cd2h-profile-vivo'}">
-															<es:hit label="title" />, <es:hit label="site.description" />
-														</c:when>
-													</c:choose>
-												</td>
+														<c:otherwise>failed index match</c:otherwise>
+													</c:choose></td>
 												<td><es:hit label="_index" /></td>
 												<td><es:hit label="score" /></td>
-												<td>
-													<a href="source.jsp?url=<es:hit label="url"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
-												</td>
-												<td>
-													<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
+												<td><a href="source.jsp?url=<es:hit label="url"/>"><i
+														style="color: #7bbac6;" class="fas fa-search"></i></a></td>
+												<td><a class="accordion-toggle" data-toggle="collapse"
+													data-parent="#accordion_<es:hit label="_id"/>"
+													href="#details_<es:hit label="_id"/>"><i
+														style="color: #7bbac6;" class="fas fa-search"></i></a>
 													<div id="accordion_<es:hit label="_id"/>">
-														<div id="details_<es:hit label="_id"/>" class="panel-collapse collapse">
-															<pre><code><es:document escape="true" /></code></pre>
+														<div id="details_<es:hit label="_id"/>"
+															class="panel-collapse collapse">
+															<pre>
+																<code>
+																	<es:document escape="true" />
+																</code>
+															</pre>
 														</div>
-													</div>
-												</td>
+													</div></td>
 											</tr>
 										</es:searchIterator>
 									</tbody>
