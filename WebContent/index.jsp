@@ -108,6 +108,27 @@ input {
 
 					<es:searchField boost="4" fieldName="label" />
 					<es:searchField boost="4" fieldName="raw.name" />
+					
+					<es:resultIncludeField fieldName="url"/>
+					<es:resultIncludeField fieldName="label"/>
+					<es:resultIncludeField fieldName="description"/>
+					<es:resultIncludeField fieldName="video_thumbnail.url"/>
+					<es:resultIncludeField fieldName="raw.language"/>
+					<es:resultIncludeField fieldName="raw.topics"/>
+					<es:resultIncludeField fieldName="raw.name"/>
+					<es:resultIncludeField fieldName="raw.bio"/>
+					<es:resultIncludeField fieldName="raw.avatar_url"/>
+					<es:resultIncludeField fieldName="raw._source.datasetDistributions.storedIn"/>
+					<es:resultIncludeField fieldName="raw._source.dataItem.dataTypes"/>
+					<es:resultIncludeField fieldName="raw.attributes.container-title"/>
+					<es:resultIncludeField fieldName="core_project_num"/>
+					<es:resultIncludeField fieldName="budget_start"/>
+					<es:resultIncludeField fieldName="budget_end"/>
+					<es:resultIncludeField fieldName="medline_journal_info.medline_ta"/>
+					<es:resultIncludeField fieldName="author"/>
+					<es:resultIncludeField fieldName="keyword"/>
+					<es:resultIncludeField fieldName="title"/>
+					<es:resultIncludeField fieldName="site.description"/>
 
 					<c:set var="drillDownList">
 						<c:forEach var="pname"
@@ -216,7 +237,7 @@ input {
 															<table>
 																<tr>
 																	<td><es:hit label="description" /></td>
-																	<td style="vertical-align: top"><img src='<es:hit label="video_thumbnail/url" />'></td>
+																	<td style="vertical-align: top"><img src='<es:hit label="video_thumbnail.url" />'></td>
 																</tr>
 															</table>
 														</c:when>
@@ -227,39 +248,39 @@ input {
 															<es:hit label="description" />
 														</c:when>
 														<c:when test="${index == 'cd2h-github-repository'}">
-															<es:hit label="raw/language" /><es:hit label="raw/topics" />
+															<es:hit label="raw.language" /><es:hit label="raw.topics" />
 														</c:when>
 														<c:when test="${index == 'cd2h-github-user'}">
 															<table>
 																<tr>
-																	<td><es:hit label="raw/name" />, <es:hit label="raw/bio" /></td>
-																	<td style="vertical-align: top"><img src='<es:hit label="raw/avatar_url" />' width="100px"></td>
+																	<td><es:hit label="raw.name" />, <es:hit label="raw.bio" /></td>
+																	<td style="vertical-align: top"><img src='<es:hit label="raw.avatar_url" />' width="100px"></td>
 																</tr>
 															</table>
 														</c:when>
 														<c:when test="${index == 'cd2h-github-organization'}">
 															<table>
 																<tr>
-																	<td><es:hit label="raw/name" /></td>
-																	<td style="vertical-align: top"><img src='<es:hit label="raw/avatar_url" />' width="100px"></td>
+																	<td><es:hit label="raw.name" /></td>
+																	<td style="vertical-align: top"><img src='<es:hit label="raw.avatar_url" />' width="100px"></td>
 																</tr>
 															</table>
 														</c:when>
 														<c:when test="${index == 'cd2h-datamed'}">
-															<es:hit label="raw/_source/datasetDistributions/storedIn" />
+															<es:hit label="raw._source.datasetDistributions.storedIn" />
 															<br><strong>Data Types:</strong>
-															<es:arrayIterator label="raw/_source/dataItem/dataTypes" var="type">
+															<es:arrayIterator label="raw._source.dataItem.dataTypes" var="type">
 																<es:hit label=""/><c:if test="${!type.isLast}">,</c:if>
 															</es:arrayIterator>
 														</c:when>
 														<c:when test="${index == 'cd2h-datacite'}">
-															<es:hit label="raw/attributes/container-title" />
+															<es:hit label="raw.attributes.container-title" />
 														</c:when>
 														<c:when test="${index == 'cd2h-nih-reporter'}">
 															<es:hit label="core_project_num" /> : <es:hit label="budget_start" /> to <es:hit label="budget_end" />
 														</c:when>
 														<c:when test="${index == 'cd2h-nih-litcovid'}">
-															<es:hit label="medline_journal_info/medline_ta" />
+															<es:hit label="medline_journal_info.medline_ta" />
 															<br><strong>Authors:</strong>
 															<es:arrayIterator label="author" var="auth" limitCriteria="5" >
 																<c:set var="coll"><es:hit label="collective_name"/></c:set>
@@ -282,7 +303,7 @@ input {
 															</es:arrayIterator>
 														</c:when>
 														<c:when test="${index == 'cd2h-profile-vivo'}">
-															<es:hit label="title" />, <es:hit label="site/description" />
+															<es:hit label="title" />, <es:hit label="site.description" />
 														</c:when>
 													</c:choose>
 												</td>
