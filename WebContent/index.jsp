@@ -218,13 +218,14 @@ input {
 								</p>
 							</div>
 							<div>
-								<table id="result_table" class="display" style="width: 100%">
+								<table id="result_table" class="display" style="width:100%">
 									<thead>
 										<tr>
 											<th>Result</th>
 											<th>Source</th>
 											<th>Score</th>
-											<th>Raw</th>
+											<th>Document</th>
+											<th>Raw Result</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -309,6 +310,9 @@ input {
 												</td>
 												<td><es:hit label="_index" /></td>
 												<td><es:hit label="score" /></td>
+												<td>
+													<a href="source.jsp?url=<es:hit label="url"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
+												</td>
 												<td>
 													<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
 													<div id="accordion_<es:hit label="_id"/>">

@@ -39,4 +39,5 @@ WebContent/resources/layout.css -text
 WebContent/resources/slick.min.css -text
 WebContent/resources/style.css -text
 WebContent/resources/styles.css -text
+WebContent/source.jsp -text
 /pom.xml -text
