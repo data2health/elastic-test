@@ -227,7 +227,9 @@ input {
 										<tr>
 											<th>Result</th>
 											<th>Source</th>
+											<th>Rank</th>
 											<th>Score</th>
+											<th>Details</th>
 											<th>Document</th>
 											<th>Raw Result</th>
 										</tr>
@@ -236,9 +238,9 @@ input {
 										<es:searchIterator>
 											<c:set var="index"><es:hit label="_index" /></c:set>
 											<tr>
-												<td><c:choose>
+												<c:choose>
 														<c:when test="${fn:startsWith(index,'cd2h-')}">
-															<h5><a href="<es:hit label="url" />"><es:hit label="label" /></a> </h5>
+															<td data-order="<es:hit label="label" />"><h5><a href="<es:hit label="url" />"><es:hit label="label" /></a> </h5>
 															<c:choose>
 																<c:when test="${index == 'cd2h-youtube-video'}">
 																	<table>
@@ -322,9 +324,10 @@ input {
 																	<es:hit label="title" />, <es:hit label="site.description" />
 																</c:when>
 															</c:choose>
+															</td>
 														</c:when>
 														<c:when test="${fn:startsWith(index,'outbreak')}">
-															<h5>
+															<td data-order="<es:hit label="name" />"><h5>
 																<c:set var="doi"><es:hit label="doi" /></c:set>
 																<c:choose>
 																	<c:when test="${not empty doi}">
@@ -334,18 +337,19 @@ input {
 																		<a href="<es:hit label="url" />"><es:hit label="name" /></a>
 																	</c:otherwise>
 																</c:choose>
-															</h5>
+															</h5></td>
 														</c:when>
 														<c:otherwise>failed index match</c:otherwise>
 													</c:choose></td>
 												<td><es:hit label="_index" /></td>
+												<td><es:hitRank/></td>
 												<td><es:hit label="score" /></td>
-												<td><a href="source.jsp?url=<es:hit label="url"/>"><i
-														style="color: #7bbac6;" class="fas fa-search"></i></a></td>
-												<td><a class="accordion-toggle" data-toggle="collapse"
-													data-parent="#accordion_<es:hit label="_id"/>"
-													href="#details_<es:hit label="_id"/>"><i
-														style="color: #7bbac6;" class="fas fa-search"></i></a>
+												<td><a class="details-toggle" data-toggle="collapse" data-parent="#details_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
+													<div id="details_<es:hit label="_id"/>">
+														<jsp:include page="details.jsp"></jsp:include>
+													</div></td>
+												<td><a href="source.jsp?url=<es:hit label="url"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a></td>
+												<td><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
 													<div id="accordion_<es:hit label="_id"/>">
 														<div id="details_<es:hit label="_id"/>"
 															class="panel-collapse collapse">
@@ -365,7 +369,7 @@ input {
 										$('#result_table').DataTable( {
 											pageLength: 5,
 									    	lengthMenu: [ 5, 10, 25, 50, 75, 100 ],
-									    	order: [[2, 'desc']]
+									    	order: [[2, 'asc']]
 										} );
 									});
 								</script>
