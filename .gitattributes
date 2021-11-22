@@ -31,6 +31,7 @@ WebContent/images/person_icon.png -text
 WebContent/images/tile_background4.png -text
 WebContent/index.jsp -text
 WebContent/local_nav.jsp -text
+WebContent/renderReporterLink.jsp -text
 WebContent/resources/cd2h -text
 WebContent/resources/css -text
 WebContent/resources/d3.v3.min.js -text

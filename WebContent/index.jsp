@@ -127,7 +127,7 @@ input {
 					<es:resultIncludeField fieldName="budget_end"/>
 					<es:resultIncludeField fieldName="medline_journal_info.medline_ta"/>
 					<es:resultIncludeField fieldName="author"/>
-					<es:resultIncludeField fieldName="keyword"/>
+					<es:resultIncludeField fieldName="article_id"/>
 					<es:resultIncludeField fieldName="title"/>
 					<es:resultIncludeField fieldName="site.description"/>
 
@@ -295,7 +295,7 @@ input {
 																	<br>
 																	<strong>Authors:</strong>
 																	<es:arrayIterator label="author" var="auth"
-																		limitCriteria="5">
+																		limitCriteria="3">
 																		<c:set var="coll">
 																			<es:hit label="collective_name" />
 																		</c:set>
@@ -303,22 +303,25 @@ input {
 																			<c:when test="${empty coll}">
 																				<es:hit label="initials" />
 																				<es:hit label="last_name" />
-																				(<i><es:arrayIterator label="author_affiliation" var="aff">
-																					<es:hit label="affiliation" /><c:if test="${!aff.isLast}">,</c:if>
-																				</es:arrayIterator></i>)<c:if test="${!auth.isLast}">,</c:if>
+																				<c:if test="${!auth.isLast}">,</c:if>
 																			</c:when>
 																			<c:otherwise>
 																				<es:hit label="collective_name" />
 																				<c:if test="${!auth.isLast}">,</c:if>
 																			</c:otherwise>
 																		</c:choose>
-																		<c:if test="${auth.hitRank == 5 && auth.count > 5}">, et al.</c:if>
+																		<c:if test="${auth.hitRank == 3 && auth.count > 3}">, et al.</c:if>
 																	</es:arrayIterator>
-																	<br>
-																	<strong>Keywords:</strong>
-																	<es:arrayIterator label="keyword" var="key">
-																		<es:hit label="keyword" /><c:if test="${!key.isLast}">,</c:if>
-																	</es:arrayIterator>
+									<c:remove var="doi"/>
+									<es:arrayIterator label="article_id" var="ident">
+										<c:if test='${ident.current.get("id_type") == "doi" }'>
+											<c:set var="doi"><es:hit label="article_id" /></c:set>
+											<c:if test="${fn:startsWith(doi,'10')}">
+												<c:set var="doi" value="http://dx.doi.org/${doi}"/>
+											</c:if>
+											<br><strong>DOI: </strong> <a href="${doi}"><es:hit label="article_id" /></a>
+										</c:if>
+									</es:arrayIterator>
 																</c:when>
 																<c:when test="${index == 'cd2h-profile-vivo'}">
 																	<es:hit label="title" />, <es:hit label="site.description" />
@@ -344,10 +347,9 @@ input {
 												<td><es:hit label="_index" /></td>
 												<td><es:hitRank/></td>
 												<td><es:hit label="score" /></td>
-												<td><a class="details-toggle" data-toggle="collapse" data-parent="#details_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
-													<div id="details_<es:hit label="_id"/>">
-														<jsp:include page="details.jsp"></jsp:include>
-													</div></td>
+												<td><a onclick="detail_render('details_<es:hit label="_id"/>', '<es:hit label="url" />');"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
+													<div id="details_<es:hit label="_id"/>"></div>
+												</td>
 												<td><a href="source.jsp?url=<es:hit label="url"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a></td>
 												<td><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
 													<div id="accordion_<es:hit label="_id"/>">
@@ -387,6 +389,16 @@ input {
 		$('#backtop').on('click', function() {
 			$('#results-table').scrollTop(0);
 		});
+		
+		function detail_render(div_id, url) {
+			var theDIV = document.getElementById(div_id);
+			if (theDIV.innerHTML == "") {
+				$("#"+div_id).load("details.jsp?url="+url);
+			} else {
+			//	alert('occupied');
+				theDIV.innerHTML = "";
+			}
+		}
 
 		function scrollFunction() {
 			if ($('#results-table').scrollTop() < 1000) {

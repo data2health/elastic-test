@@ -38,8 +38,6 @@
 <link rel='stylesheet' id='slick_js_css-css'
 	href='https://ctsa.ncats.nih.gov/cd2h/wp-content/themes/ctsa-website/css/slick.min.css?ver=4.9.7'
 	type='text/css' media='all' />
-<script type='text/javascript'
-	src='https://ctsa.ncats.nih.gov/cd2h/wp-content/themes/ctsa-website/scripts/jquery-3.3.1.min.js?ver=3.3.1'></script>
 <link rel='https://api.w.org/'
 	href='https://ctsa.ncats.nih.gov/cd2h/wp-json/' />
 <link rel="EditURI" type="application/rsd+xml" title="RSD"
