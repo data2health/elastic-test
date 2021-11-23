@@ -38,54 +38,55 @@ input {
 }
 </style>
 <style>
-        .cards tbody tr {
-            float: left;
-            width: 20rem;
-            margin: 0.5rem;
-            border: 0.0625rem solid rgba(0,0,0,.125);
-    	    border-radius: .25rem;
-            box-shadow: 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.25);
-        }
-        .cards tbody td {
-            display: block;
-        }
-        .cards thead {
-            display: none;
-        }
-        
-        .cards td:before {
-            content: attr(data-label);
-        	display: inline;
-        	position: relative;
-        	font-size: 85%;
-        	top: -0.5rem;
-        	float: left;
-        	color: #808080;
-        	min-width: 4rem;
-        	margin-left: 0;
-        	margin-right: 1rem;
-        	text-align: left;
-        }
-        tr.selected td:before {
-            color: #404040;
-        }
+.cards tbody tr {
+	float: left;
+	width: 20rem;
+	margin: 0.5rem;
+	border: 0.0625rem solid rgba(0, 0, 0, .125);
+	border-radius: .25rem;
+	box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.25);
+}
 
-        .table .fa {
-            font-size: 2.5rem;
-            text-align: left;
-        }
-        .cards .fa {
-            font-size: 7.5rem;
-        }
-        
-        
-    </style>
+.cards tbody td {
+	display: block;
+}
+
+.cards thead {
+	display: none;
+}
+
+.cards td:before {
+	content: attr(data-label);
+	display: inline;
+	position: relative;
+	font-size: 85%;
+	top: -0.5rem;
+	float: left;
+	color: #808080;
+	min-width: 4rem;
+	margin-left: 0;
+	margin-right: 1rem;
+	text-align: left;
+}
+
+tr.selected td:before {
+	color: #404040;
+}
+
+.table .fa {
+	font-size: 2.5rem;
+	text-align: left;
+}
+
+.cards .fa {
+	font-size: 7.5rem;
+}
+</style>
 
 <body class="home page-template-default page page-id-6 CD2H">
 	<jsp:include page="header.jsp" flush="true" />
 
-	<div class="container-fluid"
-		style="padding-left: 5%; padding-right: 5%;">
+	<div class="container-fluid" style="padding-left: 5%; padding-right: 5%;">
 		<br /> <br />
 		<form method='GET' action='index.jsp'>
 			<div id=form>
@@ -103,26 +104,22 @@ input {
 					</table>
 				</c:if>
 				<h2>
-					<i style="color: #7bbac6;" class="fas fa-search"></i> Faceted
-					Search
+					<i style="color: #7bbac6;" class="fas fa-search"></i> Faceted Search
 				</h2>
 				<fieldset>
-					<input class='search-box' name="query" value="${param.query}"
-						size=50> <input type=submit name=submitButton value=Go!>
+					<input class='search-box' name="query" value="${param.query}" size=50> <input type=submit name=submitButton value=Go!>
 					<c:if test="${not empty param.query}">
-						<a class="search-reset" href="index.jsp" title="Reset Search"><i
-							class="far fa-times-circle"></i></a>
+						<a class="search-reset" href="index.jsp" title="Reset Search"><i class="far fa-times-circle"></i></a>
 					</c:if>
 				</fieldset>
 			</div>
 			<br />
 			<c:if test="${not empty param.query}">
 				<es:index propertyName="es_test">
-					<c:forEach var="pname"
-						items="${pageContext.request.parameterNames}">
+					<c:forEach var="pname" items="${pageContext.request.parameterNames}">
 						<c:forEach items="${paramValues[pname]}" var="selectedValue">
 							<c:choose>
-								<c:when	test="${pname == 'query' || pname == 'submitButton' || pname == 'result_table_length' }">
+								<c:when test="${pname == 'query' || pname == 'submitButton' || pname == 'result_table_length' }">
 								</c:when>
 								<c:when test="${pname == 'index'}">
 									<es:filter termString="${selectedValue}" fieldName="_${pname }" />
@@ -145,49 +142,47 @@ input {
 
 					<es:aggregator displayName="index" fieldName="_index" />
 					<es:aggregator displayName="entity" fieldName="entity.keyword" />
-					<es:aggregator displayName="status"	fieldName="overall_status.keyword" />
+					<es:aggregator displayName="status" fieldName="overall_status.keyword" />
 					<es:aggregator displayName="type" fieldName="study_type.keyword" />
 					<es:aggregator displayName="datatype" fieldName="raw._source.dataItem.dataTypes.keyword" size="12" />
 
 					<es:searchField boost="4" fieldName="label" />
 					<es:searchField boost="4" fieldName="raw.name" />
 					<es:searchField boost="4" fieldName="name" />
-					
-					<es:resultIncludeField fieldName="url"/>
-					<es:resultIncludeField fieldName="label"/>
-					<es:resultIncludeField fieldName="description"/>
-					<es:resultIncludeField fieldName="video_thumbnail.url"/>
-					<es:resultIncludeField fieldName="raw.language"/>
-					<es:resultIncludeField fieldName="raw.topics"/>
-					<es:resultIncludeField fieldName="raw.name"/>
-					<es:resultIncludeField fieldName="raw.bio"/>
-					<es:resultIncludeField fieldName="raw.avatar_url"/>
-					<es:resultIncludeField fieldName="raw._source.datasetDistributions.storedIn"/>
-					<es:resultIncludeField fieldName="raw._source.dataItem.dataTypes"/>
-					<es:resultIncludeField fieldName="raw.attributes.container-title"/>
-					<es:resultIncludeField fieldName="core_project_num"/>
-					<es:resultIncludeField fieldName="budget_start"/>
-					<es:resultIncludeField fieldName="budget_end"/>
-					<es:resultIncludeField fieldName="medline_journal_info.medline_ta"/>
-					<es:resultIncludeField fieldName="author"/>
-					<es:resultIncludeField fieldName="article_id"/>
-					<es:resultIncludeField fieldName="title"/>
-					<es:resultIncludeField fieldName="site.description"/>
 
-					<es:resultIncludeField fieldName="doi"/>
-					<es:resultIncludeField fieldName="name"/>
+					<es:resultIncludeField fieldName="url" />
+					<es:resultIncludeField fieldName="label" />
+					<es:resultIncludeField fieldName="description" />
+					<es:resultIncludeField fieldName="video_thumbnail.url" />
+					<es:resultIncludeField fieldName="raw.language" />
+					<es:resultIncludeField fieldName="raw.topics" />
+					<es:resultIncludeField fieldName="raw.name" />
+					<es:resultIncludeField fieldName="raw.bio" />
+					<es:resultIncludeField fieldName="raw.avatar_url" />
+					<es:resultIncludeField fieldName="raw._source.datasetDistributions.storedIn" />
+					<es:resultIncludeField fieldName="raw._source.dataItem.dataTypes" />
+					<es:resultIncludeField fieldName="raw.attributes.container-title" />
+					<es:resultIncludeField fieldName="core_project_num" />
+					<es:resultIncludeField fieldName="budget_start" />
+					<es:resultIncludeField fieldName="budget_end" />
+					<es:resultIncludeField fieldName="medline_journal_info.medline_ta" />
+					<es:resultIncludeField fieldName="author" />
+					<es:resultIncludeField fieldName="article_id" />
+					<es:resultIncludeField fieldName="title" />
+					<es:resultIncludeField fieldName="site.description" />
+
+					<es:resultIncludeField fieldName="doi" />
+					<es:resultIncludeField fieldName="name" />
 
 					<c:set var="drillDownList">
-						<c:forEach var="pname"
-							items="${pageContext.request.parameterNames}">
+						<c:forEach var="pname" items="${pageContext.request.parameterNames}">
 							${pname}
 						</c:forEach>
 
 					</c:set>
-					<es:search queryString="${param.query}" limitCriteria="1000" >
+					<es:search queryString="${param.query}" limitCriteria="1000">
 						<div style="float: left">
-							<div id="facet-box"
-								style="width: 100%; padding: 0px 80px 0px 0px; float: left">
+							<div id="facet-box" style="width: 100%; padding: 0px 80px 0px 0px; float: left">
 								<h5>Aggregations</h5>
 								<div class='card' style="with: 100%">
 									<div class="card-body" style="padding-right: 30px">
@@ -212,10 +207,7 @@ input {
 															</c:choose>
 														</c:set>
 														<div class='facet-list-dropdown'>
-															<button class="btn btn-facet" type="button"
-																data-toggle="collapse"
-																data-target='${"#facet-med-content-box"}${fn:replace(facet1," ", "")}'
-																aria-expanded="false"
+															<button class="btn btn-facet" type="button" data-toggle="collapse" data-target='${"#facet-med-content-box"}${fn:replace(facet1," ", "")}' aria-expanded="false"
 																aria-controls='${"facet-med-content-box"}${fn:replace(facet1," ", "")}'>
 																<span class="fas-li"><i class="${chevrontop}"></i></span>
 															</button>
@@ -235,15 +227,29 @@ input {
 															</c:choose>
 														</c:set>
 
-														<div class="${position_med}"
-															id='${"facet-med-content-box"}${fn:replace(facet1," ", "")}'>
+														<div class="${position_med}" id='${"facet-med-content-box"}${fn:replace(facet1," ", "")}'>
 															<ol class="facetList">
 																<es:aggregationTermIterator>
-																	<li><input type="checkbox" id="index"
-																		name="<es:aggregationName />"
-																		value="<es:aggregationTerm />"
-																		class="form-check-input"
+																	<li><input type="checkbox" id="index" name="<es:aggregationName />" value="<es:aggregationTerm />" class="form-check-input"
 																		<es:aggregationTermStatus request="${pageContext.request}"/>>
+																		<c:set var="term"><es:aggregationTerm /></c:set>
+																		<c:choose>
+																			<c:when test="${term == 'person'}">
+																				<td><i class="fas fa-user"></i></td>
+																			</c:when>
+																			<c:when test="${term == 'organization'}">
+																				<td><i class="fas fa-users"></i></td>
+																			</c:when>
+																			<c:when test="${term == 'repository'}">
+																				<td><i class="fas fa-archive"></i></td>
+																			</c:when>
+																			<c:when test="${term == 'dataset'}">
+																				<td><i class="fas fa-database"></i></td>
+																			</c:when>
+																			<c:otherwise>
+																				<td><i class="fas fa-question"></i></td>
+																			</c:otherwise>
+																		</c:choose>
 																		<es:aggregationTerm /> (<es:aggregationTermCount />)
 																</es:aggregationTermIterator>
 															</ol>
@@ -258,7 +264,9 @@ input {
 						</div>
 						<div style="float: left">
 							<div id="results-header-box">
-								<h3 id="results-header">Search Results:</h3>
+								<h3 id="results-header">
+									Search Results:
+								</h3>
 								<p>
 									Result Count:
 									<es:count />
@@ -271,9 +279,10 @@ input {
 								</ul>
 							</div>
 							<div>
-								<table id="result_table" class="display" style="width:100%">
+								<table id="result_table" class="display" style="width: 100%">
 									<thead>
 										<tr>
+											<th>Entity</th>
 											<th>Result</th>
 											<th>Source</th>
 											<th>Rank</th>
@@ -285,12 +294,32 @@ input {
 									</thead>
 									<tbody>
 										<es:searchIterator>
-											<c:set var="index"><es:hit label="_index" /></c:set>
+											<c:set var="index">
+												<es:hit label="_index" />
+											</c:set>
 											<tr>
 												<c:choose>
-														<c:when test="${fn:startsWith(index,'cd2h-')}">
-															<td data-order="<es:hit label="label" />"><h5><a href="<es:hit label="url" />"><es:hit label="label" /></a> </h5>
-															<c:choose>
+													<c:when test="${index == 'cd2h-github-user' || index == 'cd2h-profile-vivo'}">
+														<td><i class="fas fa-user"></i></td>
+													</c:when>
+													<c:when test="${index == 'cd2h-github-organization'}">
+														<td><i class="fas fa-users"></i></td>
+													</c:when>
+													<c:when test="${index == 'cd2h-github-repository'}">
+														<td><i class="fas fa-archive"></i></td>
+													</c:when>
+													<c:when test="${index == 'cd2h-datamed' || index == 'cd2h-datacite'}">
+														<td><i class="fas fa-database"></i></td>
+													</c:when>
+													<c:otherwise>
+														<td><i class="fas fa-question"></i></td>
+													</c:otherwise>
+												</c:choose>
+												<c:choose>
+													<c:when test="${fn:startsWith(index,'cd2h-')}">
+														<td data-order="<es:hit label="label" />"><h5>
+																<a href="<es:hit label="url" />"><es:hit label="label" /></a>
+															</h5> <c:choose>
 																<c:when test="${index == 'cd2h-youtube-video'}">
 																	<table>
 																		<tr>
@@ -330,7 +359,8 @@ input {
 																	<br>
 																	<strong>Data Types:</strong>
 																	<es:arrayIterator label="raw._source.dataItem.dataTypes" var="type">
-																		<es:hit label="" /><c:if test="${!type.isLast}">,</c:if>
+																		<es:hit label="" />
+																		<c:if test="${!type.isLast}">,</c:if>
 																	</es:arrayIterator>
 																</c:when>
 																<c:when test="${index == 'cd2h-datacite'}">
@@ -343,8 +373,7 @@ input {
 																	<es:hit label="medline_journal_info.medline_ta" />
 																	<br>
 																	<strong>Authors:</strong>
-																	<es:arrayIterator label="author" var="auth"
-																		limitCriteria="3">
+																	<es:arrayIterator label="author" var="auth" limitCriteria="3">
 																		<c:set var="coll">
 																			<es:hit label="collective_name" />
 																		</c:set>
@@ -361,26 +390,31 @@ input {
 																		</c:choose>
 																		<c:if test="${auth.hitRank == 3 && auth.count > 3}">, et al.</c:if>
 																	</es:arrayIterator>
-									<c:remove var="doi"/>
-									<es:arrayIterator label="article_id" var="ident">
-										<c:if test='${ident.current.get("id_type") == "doi" }'>
-											<c:set var="doi"><es:hit label="article_id" /></c:set>
-											<c:if test="${fn:startsWith(doi,'10')}">
-												<c:set var="doi" value="http://dx.doi.org/${doi}"/>
-											</c:if>
-											<br><strong>DOI: </strong> <a href="${doi}"><es:hit label="article_id" /></a>
-										</c:if>
-									</es:arrayIterator>
+																	<c:remove var="doi" />
+																	<es:arrayIterator label="article_id" var="ident">
+																		<c:if test='${ident.current.get("id_type") == "doi" }'>
+																			<c:set var="doi">
+																				<es:hit label="article_id" />
+																			</c:set>
+																			<c:if test="${fn:startsWith(doi,'10')}">
+																				<c:set var="doi" value="http://dx.doi.org/${doi}" />
+																			</c:if>
+																			<br>
+																			<strong>DOI: </strong>
+																			<a href="${doi}"><es:hit label="article_id" /></a>
+																		</c:if>
+																	</es:arrayIterator>
 																</c:when>
 																<c:when test="${index == 'cd2h-profile-vivo'}">
 																	<es:hit label="title" />, <es:hit label="site.description" />
 																</c:when>
-															</c:choose>
-															</td>
-														</c:when>
-														<c:when test="${fn:startsWith(index,'outbreak')}">
-															<td data-order="<es:hit label="name" />"><h5>
-																<c:set var="doi"><es:hit label="doi" /></c:set>
+															</c:choose></td>
+													</c:when>
+													<c:when test="${fn:startsWith(index,'outbreak')}">
+														<td data-order="<es:hit label="name" />"><h5>
+																<c:set var="doi">
+																	<es:hit label="doi" />
+																</c:set>
 																<c:choose>
 																	<c:when test="${not empty doi}">
 																		<a href="http://dx.doi.org/<es:hit label="doi" />"><es:hit label="name" /></a>
@@ -390,20 +424,20 @@ input {
 																	</c:otherwise>
 																</c:choose>
 															</h5></td>
-														</c:when>
-														<c:otherwise>failed index match</c:otherwise>
-													</c:choose></td>
+													</c:when>
+													<c:otherwise>failed index match</c:otherwise>
+												</c:choose>
+												</td>
 												<td><es:hit label="_index" /></td>
-												<td><es:hitRank/></td>
+												<td><es:hitRank /></td>
 												<td><es:hit label="score" /></td>
 												<td><a onclick="detail_render('details_<es:hit label="_id"/>', '<es:hit label="url" />');"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
-													<div id="details_<es:hit label="_id"/>"></div>
-												</td>
+													<div id="details_<es:hit label="_id"/>"></div></td>
 												<td><a href="source.jsp?url=<es:hit label="url"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a></td>
-												<td><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;" class="fas fa-search"></i></a>
+												<td><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_<es:hit label="_id"/>" href="#details_<es:hit label="_id"/>"><i style="color: #7bbac6;"
+														class="fas fa-search"></i></a>
 													<div id="accordion_<es:hit label="_id"/>">
-														<div id="details_<es:hit label="_id"/>"
-															class="panel-collapse collapse">
+														<div id="details_<es:hit label="_id"/>" class="panel-collapse collapse">
 															<pre>
 																<code>
 																	<es:document escape="true" />
