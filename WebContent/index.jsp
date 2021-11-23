@@ -234,20 +234,32 @@ tr.selected td:before {
 																		<es:aggregationTermStatus request="${pageContext.request}"/>>
 																		<c:set var="term"><es:aggregationTerm /></c:set>
 																		<c:choose>
-																			<c:when test="${term == 'person'}">
-																				<td><i class="fas fa-user"></i></td>
+																			<c:when test="${term == 'person' || term == 'cd2h-profile-vivo' || term == 'cd2h-github-user'}">
+																				<i class="fas fa-user"></i>
 																			</c:when>
-																			<c:when test="${term == 'organization'}">
-																				<td><i class="fas fa-users"></i></td>
+																			<c:when test="${term == 'organization' || term == 'cd2h-github-organization'}">
+																				<i class="fas fa-users"></i>
 																			</c:when>
-																			<c:when test="${term == 'repository'}">
-																				<td><i class="fas fa-archive"></i></td>
+																			<c:when test="${term == 'repository' || term == 'cd2h-github-repository'}">
+																				<i class="fas fa-archive"></i>
 																			</c:when>
-																			<c:when test="${term == 'dataset'}">
-																				<td><i class="fas fa-database"></i></td>
+																			<c:when test="${term == 'dataset' || term == 'cd2h-datamed' || term == 'cd2h-datacite'}">
+																				<i class="fas fa-database"></i>
+																			</c:when>
+																			<c:when test="${term == 'grant' || term == 'cd2h-nih-reporter'}">
+																				<i class="fas fa-search-dollar"></i>
+																			</c:when>
+																			<c:when test="${term == 'publication' || term == 'cd2h-nih-litcovid'}">
+																				<i class="fas fa-book-open"></i>
+																			</c:when>
+																			<c:when test="${term == 'clinical trial' || term == 'cd2h-clinical-trials'}">
+																				<i class="fas fa-microscope"></i>
+																			</c:when>
+																			<c:when test="${term == 'video clip' || term == 'cd2h-youtube-video' || term == 'cd2h-youtube-playlist' || term == 'cd2h-youtube-channel'}">
+																				<i class="fas fa-file-video"></i>
 																			</c:when>
 																			<c:otherwise>
-																				<td><i class="fas fa-question"></i></td>
+																				<i class="fas fa-question"></i>
 																			</c:otherwise>
 																		</c:choose>
 																		<es:aggregationTerm /> (<es:aggregationTermCount />)
@@ -310,6 +322,18 @@ tr.selected td:before {
 													</c:when>
 													<c:when test="${index == 'cd2h-datamed' || index == 'cd2h-datacite'}">
 														<td><i class="fas fa-database"></i></td>
+													</c:when>
+													<c:when test="${index == 'cd2h-nih-reporter'}">
+														<td><i class="fas fa-search-dollar"></i></td>
+													</c:when>
+													<c:when test="${index == 'cd2h-nih-litcovid'}">
+														<td><i class="fas fa-book-open"></i></td>
+													</c:when>
+													<c:when test="${index == 'cd2h-linical-trials'}">
+														<td><i class="fas fa-microscope"></i></td>
+													</c:when>
+													<c:when test="${term == 'video clip' || term == 'cd2h-youtube-video' || term == 'cd2h-youtube-playlist' || term == 'cd2h-youtube-channel'}">
+														<td><i class="fas fa-file-video"></i></td>
 													</c:when>
 													<c:otherwise>
 														<td><i class="fas fa-question"></i></td>
