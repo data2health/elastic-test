@@ -98,7 +98,7 @@
 						</es:arrayIterator>
 						
 						<es:arrayIterator label="abstract" var="abstr">
-							<c:if test="${abstr.isFirst}"><h5>Abstract:</h5></c:if>
+							<c:if test="${abstr.isFirst}"><br><h5>Abstract:</h5></c:if>
 							<strong><es:hit label="label" /></strong>
 							<p><es:hit label="abstract" /></p>
 						</es:arrayIterator>

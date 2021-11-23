@@ -37,6 +37,49 @@ input {
 	
 }
 </style>
+<style>
+        .cards tbody tr {
+            float: left;
+            width: 20rem;
+            margin: 0.5rem;
+            border: 0.0625rem solid rgba(0,0,0,.125);
+    	    border-radius: .25rem;
+            box-shadow: 0.25rem 0.25rem 0.5rem rgba(0,0,0,0.25);
+        }
+        .cards tbody td {
+            display: block;
+        }
+        .cards thead {
+            display: none;
+        }
+        
+        .cards td:before {
+            content: attr(data-label);
+        	display: inline;
+        	position: relative;
+        	font-size: 85%;
+        	top: -0.5rem;
+        	float: left;
+        	color: #808080;
+        	min-width: 4rem;
+        	margin-left: 0;
+        	margin-right: 1rem;
+        	text-align: left;
+        }
+        tr.selected td:before {
+            color: #404040;
+        }
+
+        .table .fa {
+            font-size: 2.5rem;
+            text-align: left;
+        }
+        .cards .fa {
+            font-size: 7.5rem;
+        }
+        
+        
+    </style>
 
 <body class="home page-template-default page page-id-6 CD2H">
 	<jsp:include page="header.jsp" flush="true" />
@@ -220,6 +263,12 @@ input {
 									Result Count:
 									<es:count />
 								</p>
+								<ul>
+									<li>The card / table icon at the top-left of the table toggles between card view and table view.
+									<li>The detail icon displays additional information regarding the hit (currently only interesting for LitCOVID articles).
+									<li>The document icon displays the entire original JSON source document.
+									<li>The raw result icon displays as JSON the elements of the original source document programmatically selected for retrieval and used by the result and details columns.
+								</ul>
 							</div>
 							<div>
 								<table id="result_table" class="display" style="width:100%">
@@ -369,8 +418,56 @@ input {
 								<script>
 									$(document).ready(function() {
 										$('#result_table').DataTable( {
-											pageLength: 5,
-									    	lengthMenu: [ 5, 10, 25, 50, 75, 100 ],
+							                "dom": 'Blfrtip',
+							                buttons: [
+							                    {
+							                        text: '<i class="fa fa-id-badge fa-fw fa-lg" aria-hidden="true"></i>',
+							                        action: function (e, dt, button, config) {
+							                            $("#result_table").toggleClass("cards");
+							                            $("#card-toggle .fa").toggleClass([ "fa-table", "fa-id-badge" ]);
+
+							                            if($("#result_table").hasClass("cards")){
+
+							                                // Create an array of labels containing all table headers
+							                                var labels = [];
+							                                $('#result_table').find('thead th').each(function() {
+							                                    labels.push($(this).text());
+							                                });
+
+							                                // Add data-label attribute to each cell
+							                                $('#result_table').find('tbody tr').each(function() {
+							                                    $(this).find('td').each(function(column) {
+							                                        $(this).attr('data-label', labels[column]);
+							                                    });
+							                                });
+
+							                                var max = 0;
+							                                $('#result_table tr').each(function() {
+							                                    max = Math.max($(this).height(), max);
+							                                }).height("auto");
+
+							                            } else {
+
+							                                // Remove data-label attribute from each cell
+							                                $('#result_table').find('td').each(function() {
+							                                    $(this).removeAttr('data-label');
+							                                });
+
+							                                $("#result_table tr").each(function(){
+							                                    $(this).height("auto");
+							                                });
+							                                
+							                            }
+							                        },
+							                        attr:  {
+							                            title: 'Change views',
+							                            id: 'card-toggle'
+							                        }
+							                    }
+							                ],
+
+											pageLength: 3,
+									    	lengthMenu: [ 3, 5, 10, 25, 50, 75, 100 ],
 									    	order: [[2, 'asc']]
 										} );
 									});
