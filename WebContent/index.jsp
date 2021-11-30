@@ -133,6 +133,9 @@ tr.selected td:before {
 								<c:when test="${pname == 'datatype'}">
 									<es:filter termString="${selectedValue}" fieldName="raw._source.dataItem.dataTypes.keyword" />
 								</c:when>
+								<c:when test="${pname == 'tool-type'}">
+									<es:filter termString="${selectedValue}" fieldName="tool.toolType.keyword" />
+								</c:when>
 								<c:otherwise>
 									<es:filter termString="${selectedValue}" fieldName="${pname}.keyword" />
 								</c:otherwise>
@@ -142,6 +145,7 @@ tr.selected td:before {
 
 					<es:aggregator displayName="index" fieldName="_index" />
 					<es:aggregator displayName="entity" fieldName="entity.keyword" />
+					<es:aggregator displayName="tool-type" fieldName="tool.toolType.keyword" />
 					<es:aggregator displayName="status" fieldName="overall_status.keyword" />
 					<es:aggregator displayName="type" fieldName="study_type.keyword" />
 					<es:aggregator displayName="datatype" fieldName="raw._source.dataItem.dataTypes.keyword" size="12" />
@@ -170,6 +174,7 @@ tr.selected td:before {
 					<es:resultIncludeField fieldName="article_id" />
 					<es:resultIncludeField fieldName="title" />
 					<es:resultIncludeField fieldName="site.description" />
+					<es:resultIncludeField fieldName="tool" />
 
 					<es:resultIncludeField fieldName="doi" />
 					<es:resultIncludeField fieldName="name" />
@@ -448,6 +453,11 @@ tr.selected td:before {
 																	</c:otherwise>
 																</c:choose>
 															</h5></td>
+													</c:when>
+													<c:when test="${fn:startsWith(index,'csbc')}">
+														<td data-order="<es:hit label="tool.toolName" />"><h5>
+																<a href="<es:hit label="tool.homepage" />"><es:hit label="tool.toolName" /></a>
+															</h5><es:hit label="tool.description" /></td>
 													</c:when>
 													<c:otherwise>failed index match</c:otherwise>
 												</c:choose>
