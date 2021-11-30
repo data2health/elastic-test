@@ -145,7 +145,7 @@ tr.selected td:before {
 
 					<es:aggregator displayName="index" fieldName="_index" />
 					<es:aggregator displayName="entity" fieldName="entity.keyword" />
-					<es:aggregator displayName="tool-type" fieldName="tool.toolType.keyword" />
+					<es:aggregator displayName="entity" fieldName="tool.toolType.keyword" />
 					<es:aggregator displayName="status" fieldName="overall_status.keyword" />
 					<es:aggregator displayName="type" fieldName="study_type.keyword" />
 					<es:aggregator displayName="datatype" fieldName="raw._source.dataItem.dataTypes.keyword" size="12" />
