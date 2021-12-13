@@ -104,7 +104,7 @@ tr.selected td:before {
 					</table>
 				</c:if>
 				<h2>
-					<i style="color: #7bbac6;" class="fas fa-search"></i> Faceted Search
+					<img src="images/logo.png" width="200px"/><i style="color: #7bbac6;" class="fas fa-search"></i> Faceted Search Test Harness
 				</h2>
 				<fieldset>
 					<input class='search-box' name="query" value="${param.query}" size=50> <input type=submit name=submitButton value=Go!>
@@ -254,7 +254,7 @@ tr.selected td:before {
 																			<c:when test="${term == 'grant' || term == 'cd2h-nih-reporter'}">
 																				<i class="fas fa-search-dollar"></i>
 																			</c:when>
-																			<c:when test="${term == 'publication' || term == 'cd2h-nih-litcovid'}">
+																			<c:when test="${term == 'publication' || term == 'cd2h-nih-litcovid' || term == 'outbreak_litcovid_202110070745_vvrw8kmo' || term == 'outbreak_biorxiv_202110201005_cky5khsd'}">
 																				<i class="fas fa-book-open"></i>
 																			</c:when>
 																			<c:when test="${term == 'clinical trial' || term == 'cd2h-clinical-trials'}">
@@ -331,13 +331,13 @@ tr.selected td:before {
 													<c:when test="${index == 'cd2h-nih-reporter'}">
 														<td><i class="fas fa-search-dollar"></i></td>
 													</c:when>
-													<c:when test="${index == 'cd2h-nih-litcovid'}">
+													<c:when test="${index == 'cd2h-nih-litcovid' || index == 'outbreak_litcovid_202110070745_vvrw8kmo' || index == 'outbreak_biorxiv_202110201005_cky5khsd'}">
 														<td><i class="fas fa-book-open"></i></td>
 													</c:when>
-													<c:when test="${index == 'cd2h-linical-trials'}">
+													<c:when test="${index == 'cd2h-clinical-trials'}">
 														<td><i class="fas fa-microscope"></i></td>
 													</c:when>
-													<c:when test="${term == 'video clip' || term == 'cd2h-youtube-video' || term == 'cd2h-youtube-playlist' || term == 'cd2h-youtube-channel'}">
+													<c:when test="${index == 'cd2h-youtube-video' || index == 'cd2h-youtube-playlist' || index == 'cd2h-youtube-channel'}">
 														<td><i class="fas fa-file-video"></i></td>
 													</c:when>
 													<c:otherwise>
@@ -536,7 +536,7 @@ tr.selected td:before {
 
 											pageLength: 3,
 									    	lengthMenu: [ 3, 5, 10, 25, 50, 75, 100 ],
-									    	order: [[2, 'asc']]
+									    	order: [[3, 'asc']]
 										} );
 									});
 								</script>
