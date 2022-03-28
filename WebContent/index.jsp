@@ -124,6 +124,9 @@ tr.selected td:before {
 								<c:when test="${pname == 'index'}">
 									<es:filter termString="${selectedValue}" fieldName="_${pname }" />
 								</c:when>
+								<c:when test="${pname == 'entity'}">
+									<es:filter termString="${selectedValue}" fieldName="@type.keyword" />
+								</c:when>
 								<c:when test="${pname == 'type'}">
 									<es:filter termString="${selectedValue}" fieldName="study_type.keyword" />
 								</c:when>
@@ -144,7 +147,7 @@ tr.selected td:before {
 					</c:forEach>
 
 					<es:aggregator displayName="index" fieldName="_index" />
-					<es:aggregator displayName="entity" fieldName="entity.keyword" />
+					<es:aggregator displayName="entity" fieldName="@type.keyword" />
 					<es:aggregator displayName="tool" fieldName="tool.toolType.keyword" />
 					<es:aggregator displayName="overall_status" fieldName="overall_status.keyword" />
 					<es:aggregator displayName="study_type" fieldName="study_type.keyword" />
@@ -239,28 +242,28 @@ tr.selected td:before {
 																		<es:aggregationTermStatus request="${pageContext.request}"/>>
 																		<c:set var="term"><es:aggregationTerm /></c:set>
 																		<c:choose>
-																			<c:when test="${term == 'person' || term == 'cd2h-profile-vivo' || term == 'cd2h-github-user'}">
+																			<c:when test="${term == 'Person' || term == 'cd2h-profile-vivo' || term == 'cd2h-github-user'}">
 																				<i class="fas fa-user"></i>
 																			</c:when>
-																			<c:when test="${term == 'organization' || term == 'cd2h-github-organization'}">
+																			<c:when test="${term == 'Organization' || term == 'cd2h-github-organization'}">
 																				<i class="fas fa-users"></i>
 																			</c:when>
 																			<c:when test="${term == 'repository' || term == 'cd2h-github-repository'}">
 																				<i class="fas fa-archive"></i>
 																			</c:when>
-																			<c:when test="${term == 'dataset' || term == 'cd2h-datamed' || term == 'cd2h-datacite'}">
+																			<c:when test="${term == 'Dataset' || term == 'cd2h-datamed' || term == 'cd2h-datacite'}">
 																				<i class="fas fa-database"></i>
 																			</c:when>
-																			<c:when test="${term == 'grant' || term == 'cd2h-nih-reporter'}">
+																			<c:when test="${term == 'MonetaryGrant' || term == 'cd2h-nih-reporter'}">
 																				<i class="fas fa-search-dollar"></i>
 																			</c:when>
-																			<c:when test="${term == 'publication' || term == 'cd2h-nih-litcovid' || term == 'outbreak_litcovid_202110070745_vvrw8kmo' || term == 'outbreak_biorxiv_202110201005_cky5khsd'}">
+																			<c:when test="${term == 'Publication' || term == 'cd2h-nih-medline' || term == 'cd2h-nih-litcovid' || term == 'outbreak_litcovid_202110070745_vvrw8kmo' || term == 'outbreak_biorxiv_202110201005_cky5khsd'}">
 																				<i class="fas fa-book-open"></i>
 																			</c:when>
-																			<c:when test="${term == 'clinical trial' || term == 'cd2h-clinical-trials'}">
+																			<c:when test="${term == 'ClinicalTrial' || term == 'cd2h-clinical-trials'}">
 																				<i class="fas fa-microscope"></i>
 																			</c:when>
-																			<c:when test="${term == 'video clip' || term == 'cd2h-youtube-video' || term == 'cd2h-youtube-playlist' || term == 'cd2h-youtube-channel'}">
+																			<c:when test="${term == 'MediaObject' || term == 'cd2h-youtube-video' || term == 'cd2h-youtube-playlist' || term == 'cd2h-youtube-channel'}">
 																				<i class="fas fa-file-video"></i>
 																			</c:when>
 																			<c:otherwise>
@@ -331,7 +334,7 @@ tr.selected td:before {
 													<c:when test="${index == 'cd2h-nih-reporter'}">
 														<td><i class="fas fa-search-dollar"></i></td>
 													</c:when>
-													<c:when test="${index == 'cd2h-nih-litcovid' || index == 'outbreak_litcovid_202110070745_vvrw8kmo' || index == 'outbreak_biorxiv_202110201005_cky5khsd'}">
+													<c:when test="${index == 'cd2h-nih-medline' || index == 'cd2h-nih-litcovid' || index == 'outbreak_litcovid_202110070745_vvrw8kmo' || index == 'outbreak_biorxiv_202110201005_cky5khsd'}">
 														<td><i class="fas fa-book-open"></i></td>
 													</c:when>
 													<c:when test="${index == 'cd2h-clinical-trials'}">
@@ -346,8 +349,8 @@ tr.selected td:before {
 												</c:choose>
 												<c:choose>
 													<c:when test="${fn:startsWith(index,'cd2h-')}">
-														<td data-order="<es:hit label="label" />"><h5>
-																<a href="<es:hit label="url" />"><es:hit label="label" /></a>
+														<td data-order="<es:hit label="name" />"><h5>
+																<a href="<es:hit label="url" />"><es:hit label="name" /></a>
 															</h5> <c:choose>
 																<c:when test="${index == 'cd2h-youtube-video'}">
 																	<table>
@@ -398,7 +401,7 @@ tr.selected td:before {
 																<c:when test="${index == 'cd2h-nih-reporter'}">
 																	<es:hit label="core_project_num" /> : <es:hit label="budget_start" /> to <es:hit label="budget_end" />
 																</c:when>
-																<c:when test="${index == 'cd2h-nih-litcovid'}">
+																<c:when test="${index == 'cd2h-nih-medline' || index == 'cd2h-nih-litcovid'}">
 																	<es:hit label="medline_journal_info.medline_ta" />
 																	<br>
 																	<strong>Authors:</strong>
